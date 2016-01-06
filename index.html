@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head>
+   
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+    
+    <title>Full Screen Leaflet Map</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7/leaflet.css"    />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <script src="https://dl.dropboxusercontent.com/u/4318926/code/personalcdn/sweetalert/sweetalert.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://dl.dropboxusercontent.com/u/4318926/code/personalcdn/sweetalert/sweetalert.css">
+
+    <link rel="stylesheet" type="text/css" href="https://dl.dropboxusercontent.com/u/4318926/code/personalcdn/spinkit/spinkit.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"> </script>
+    
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+        html, body, #map {
+            height: 100%;
+            width: 100%;
+        }
+        .map_tabs
+        {
+            position:relative;bottom:90%;
+            left:10%;
+            background-color:#fff;
+            width:40%;
+            margin-right: 0px;
+            margin-left: 0px;
+            background-color: #FFF;
+            border-color: #DDD;
+            border-width: 1px;
+            border-radius: 4px 4px 0px 0px;
+            box-shadow: none;
+            margin-top: -16px;
+            margin-right: 0px;
+            margin-left: 0px;
+            border-width: 1px;
+            border-bottom-right-radius: 4px;
+            border-bottom-left-radius: 4px;
+        }
+
+        #my-tab-content
+        {
+            position:relative;bottom:70%;
+            left:50px;
+
+        }
+        
+        .more_pane
+        {
+            width: 80%;
+        }
+
+        .search
+        {
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+	
+		.image_slider
+		{
+			position:relative;
+			bottom:400px;
+			
+			float:left;
+			margin-left:auto;
+    		margin-right:auto;
+    		padding-left: 10%;
+		}
+
+		.images
+		{
+			width:100%;
+			
+			
+			overflow:hidden
+		}
+
+		.image
+		{
+			
+			
+    		float: left;
+    		overflow:hidden
+    		margin-left:3px;
+    		margin-right:3px;
+
+			
+		}
+
+		.prev
+		{
+			position: relative;
+			right:5%;
+			top:70px;
+			width: 30px;
+		}
+
+		.next
+		{
+			position: relative;
+			
+			    left: 100%;
+
+			bottom:70px;
+		}
+
+		.staroff
+		{
+			top:100px;
+			position: relative;
+			z-index: 3;
+		}
+
+		.spinner
+		{
+			position: absolute;
+			z-index:4;
+			left:50%;
+			top:30%;
+
+		}
+
+		.list_imgs
+		{
+			height: 280px;
+			margin-top:3px;
+    		margin-bottom:3px;
+    		width: 400px;
+    		position: relative;
+    		float:left;
+    		overflow: scroll;
+		}
+
+		.list_img
+		{
+			margin-top:3px;
+    		margin-bottom:3px;
+    		margin-left:3px;
+    		margin-right:3px;
+
+		}
+
+		.fav_list
+		{
+			height: 300px;
+		}
+
+    </style>
+</head>
+<body>
+	
+	<div id="spinner" class="spinner">
+
+	
+	</div>
+  
+    <div id="map"></div>
+
+
+        
+        
+    <div class="map_tabs ">
+            <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
+                <li class="active"><a onclick="show_slider()" href="#red" data-toggle="tab">Search</a></li>
+                <li><a onclick="get_locations()"  href="#orange" data-toggle="tab">Favorite Locations</a></li>
+                <li><a onclick="get_fav()" href="#yellow" data-toggle="tab">Favorite Pictures</a></li>
+       
+       
+            </ul>
+
+
+        <div id="my-tab-content" class="tab-content">
+            <div class="tab-pane more_pane active" id="red">
+                <form action="" id="location-form">
+    	            <div class="search ">
+    	              <div class="form-group">
+    	                <input type="text" id="location" class="form-control" placeholder=" Try: ' Melbourne '">
+    	              </div>
+    	              <button type="submit" class="btn btn-default">Submit</button>
+    	            </div>
+                </form>
+
+            </div>
+            <div class="tab-pane" id="orange">
+                <h1></h1>
+                <p>Not Implemented</p>
+            </div>
+            <div class="tab-pane" id="yellow">
+                
+                <h3>Favs</h3>
+                <div class="fav_list">
+                	<div id="list_imgs" class="list_imgs">
+                		<!-- <img class="list_img" src="https://farm1.staticflickr.com/633/22831431993_b5aa7c8ca8_t.jpg" alt="">
+                		<img class="list_img" src="https://farm6.staticflickr.com/5786/23349205182_823f0bc263_t.jpg" alt="">
+                		<img class="list_img" src="https://farm1.staticflickr.com/672/23446099805_d6a0da539d_t.jpg" alt="">
+                		<img class="list_img" src="https://farm1.staticflickr.com/583/23419899776_f4a00e55fd_t.jpg" alt="">
+                		<img class="list_img" src="https://farm1.staticflickr.com/583/23419899776_f4a00e55fd_t.jpg" alt=""> -->
+                	</div>
+                </div>
+            </div>
+           
+        </div>
+    
+
+    </div>
+
+
+
+
+
+		<div class="image_slider">
+			<input type="hidden" value="1" id="page">
+
+			<div class="prev"><i class="fa fa-chevron-left  fa-3x"></i>
+            </div>
+		      	<div id="images" class="images"> 
+                </div>
+
+			<div id="next" onclick="get_next_10()" class="next"><i class="fa fa-chevron-right  fa-3x"></i>
+            </div>
+			
+		</div>
+	
+	
+
+<!-- 	</div> -->
+
+
+
+
+
+
+
+
+	
+    <script
+        src="http://cdn.leafletjs.com/leaflet-0.7/leaflet.js">
+    </script>
+
+    <script src="app.js"></script>
+
+    <script>
+
+
+       
+    </script>
+    <script type="text/javascript">
+    jQuery(document).ready(function ($) {
+        $('#tabs').tab();
+
+        $('.image_slider').hide()
+    });
+</script>   
+</body>
+</html>
